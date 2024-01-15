@@ -9,26 +9,23 @@ public class L772 {
 
     private int[] helper(String s, int start) {
         Stack<Integer> stack = new Stack<>();
-
-        int num = 0;
         char preSign = '+';
+        int num = 0;
         int[] pair = new int[2];
 
         for (int i = start; i < s.length(); i++) {
             char c = s.charAt(i);
-
             if (Character.isDigit(c)) {
-                num = 10 * num + (c - '0');
+                num = num * 10 + (c - '0');
             }
 
             if (c == '(') {
-                int[] tmp = helper(s, i+1);
+                int[] tmp = helper(s, i + 1);
                 num = tmp[1];
-                i = tmp[0]; // the index of corresponding ')' character.
+                i = tmp[0];
             }
 
-            if ((!Character.isDigit(c) && !Character.isSpaceChar(c)) || i == s.length() - 1) {
-                int pre = 0;
+            if (!Character.isDigit(c) && !Character.isSpaceChar(c) || i == s.length() - 1) {
                 switch (preSign) {
                     case '+':
                         stack.push(num);
@@ -37,28 +34,26 @@ public class L772 {
                         stack.push(-num);
                         break;
                     case '*':
-                        pre = stack.pop();
-                        stack.push(pre * num);
+                        stack.push(stack.pop() * num);
                         break;
                     case '/':
-                        pre = stack.pop();
-                        stack.push(pre / num);
+                        stack.push(stack.pop() / num);
+                        break;
+                    default:
                         break;
                 }
-                preSign = c;
                 num = 0;
+                preSign = c;
             }
+
             if (c == ')') {
                 pair[0] = i;
                 break;
             }
         }
-
-        int result = 0;
         while (!stack.isEmpty()) {
-            result += stack.pop();
+            pair[1] += stack.pop();
         }
-        pair[1] = result;
         return pair;
     }
 }
