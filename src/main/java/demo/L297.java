@@ -1,4 +1,4 @@
-package leetcode;
+package demo;
 
 import utils.TreeNode;
 

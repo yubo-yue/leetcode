@@ -1,4 +1,4 @@
-package leetcode;
+package demo;
 
 public class L04 {
     public static double findMedianSortedArray(int[] nums1, int[] nums2) {
