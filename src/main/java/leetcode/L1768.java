@@ -2,20 +2,26 @@ package leetcode;
 
 public class L1768 {
     public String mergeAlternately(String word1, String word2) {
+        int len1 = word1.length();
+        int len2 = word2.length();
+        int len = Math.min(len1, len2);
         StringBuffer result = new StringBuffer();
-        int n = word1.length(), m = word2.length();
-        int minLen = Math.min(n, m);
-        for (int i = 0; i < minLen; i++) {
-            result.append(word1.charAt(i));
-            result.append(word2.charAt(i));
+        int idx = 0;
+        while (idx < len) {
+            result.append(word1.charAt(idx));
+            result.append(word2.charAt(idx));
+            idx++;
         }
 
-        while (minLen < n) {
-            result.append(word1.charAt(minLen++));
+        if (idx < len1) {
+            result.append(word1.substring(idx));
         }
-        while (minLen < m) {
-            result.append(word2.charAt(minLen++));
+
+        if (idx < len2) {
+            result.append(word2.substring(idx));
         }
+
         return result.toString();
+
     }
 }

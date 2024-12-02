@@ -10,13 +10,15 @@ public class L1071 {
 
     }
 
-    public int gcd(int a, int b) {
+    private int gcd(int a, int b) {
         int reminder = a % b;
-        while (reminder != 0) {
+        while (reminder > 0) {
             a = b;
             b = reminder;
             reminder = a % b;
         }
         return b;
     }
+
+
 }
