@@ -7,40 +7,44 @@ import java.util.Stack;
 
 public class L345 {
     public String reverseVowels(String s) {
-        int left = 0, right = s.length() - 1;
-        char[] chars = s.toCharArray();
-        while (left < right) {
-            if (isVowel(chars[left]) && isVowel(chars[right])) {
-                swap(chars, left, right);
+        //lote -> leto
+        Stack<Character> vowels = new Stack<>();
+        Set<Character> vowelSet = new HashSet<>(List.of('a', 'e', 'i', 'o', 'u'));
+        for (int i = 0; i < s.length(); i++) {
+            if (vowelSet.contains(Character.toLowerCase(s.charAt(i)))) {
+                vowels.push(s.charAt(i));
+            }
+        }
+        StringBuffer buf = new StringBuffer();
+        for (int i = 0; i < s.length(); i++) {
+            if (vowelSet.contains(Character.toLowerCase(s.charAt(i)))) {
+                buf.append(vowels.pop());
+            } else {
+                buf.append(s.charAt(i));
+            }
+        }
+        return buf.toString();
+    }
 
-                left++;
-                right--;
+    public String reverseVowels1(String s) {
+        int l = 0, r = s.length() - 1;
+        char[] arr = s.toCharArray();
+        while (l < r) {
+            if (isVowel(arr[l]) && isVowel(arr[r])) {
+                char tmp = arr[l];
+                arr[l] = arr[r];
+                arr[r] = tmp;
+                l++;
+                r--;
                 continue;
             }
-            if (!isVowel(chars[left])) {
-                left++;
-            }
-
-            if (!isVowel(chars[right])) {
-                right--;
-            }
+            if (!isVowel(arr[l])) l++;
+            if (!isVowel(arr[r])) r++;
         }
-        return new String(chars);
+        return new String(arr);
     }
 
-    private void swap(char[] chars, int left, int right) {
-        char t = chars[left];
-        chars[left] = chars[right];
-        chars[right] = t;
+    public boolean isVowel(char c) {
+        return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u' || c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U';
     }
-
-    boolean isVowel(char c) {
-        if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u' || c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U') {
-            return true;
-        }
-
-        return false;
-    }
-
-
 }
