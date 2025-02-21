@@ -5,23 +5,19 @@ public class L1768 {
         int len1 = word1.length();
         int len2 = word2.length();
         int len = Math.min(len1, len2);
-        StringBuffer result = new StringBuffer();
-        int idx = 0;
-        while (idx < len) {
-            result.append(word1.charAt(idx));
-            result.append(word2.charAt(idx));
-            idx++;
+
+        StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < len; i++) {
+            buffer.append(word1.charAt(i));
+            buffer.append(word2.charAt(i));
+        }
+        if (len < len1) {
+            buffer.append(word1.substring(len));
         }
 
-        if (idx < len1) {
-            result.append(word1.substring(idx));
+        if (len < len2) {
+            buffer.append(word2.substring(len));
         }
-
-        if (idx < len2) {
-            result.append(word2.substring(idx));
-        }
-
-        return result.toString();
-
+        return buffer.toString();
     }
 }

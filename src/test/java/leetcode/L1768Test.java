@@ -13,7 +13,6 @@ class L1768Test {
 
         String result = instance.mergeAlternately(word1, word2);
         assertEquals("adbec", result);
-
     }
 
 }
