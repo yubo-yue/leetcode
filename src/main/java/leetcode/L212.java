@@ -1,20 +1,15 @@
 package leetcode;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class L212 {
     public List<String> findWords(char[][] board, String[] words) {
-        List<String> ans = new ArrayList<>();
+        List<String> ans = new LinkedList<>();
         StringBuffer track = new StringBuffer();
         int m = board.length, n = board[0].length;
         boolean[][] visited = new boolean[m][n];
         Set<String> wordSet = new HashSet<>();
-        for (String word : words) {
-            wordSet.add(word);
-        }
+        Collections.addAll(wordSet, words);
 
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
@@ -38,7 +33,7 @@ public class L212 {
             wordSet.remove(track.toString());
         }
 
-        int[][] dirs = new int[][]{{0, 1}, {0, -1}, {-1, 0}, {1, 0}};
+        int[][] dirs = new int[][]{{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
         for (int[] dir : dirs) {
             int dx = i + dir[0];
             int dy = j + dir[1];
@@ -51,6 +46,5 @@ public class L212 {
             visited[dx][dy] = false;
             track.deleteCharAt(track.length() - 1);
         }
-
     }
 }
