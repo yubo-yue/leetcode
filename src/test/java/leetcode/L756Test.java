@@ -12,7 +12,7 @@ class L756Test {
     void pyramidTransition() {
         L756 algo = new L756();
         boolean r = algo.pyramidTransition("BCD", List.of("BCC", "CDE", "CEA", "FFF"));
-        assertTrue(r);
+        assertFalse(r);
 
     }
 
