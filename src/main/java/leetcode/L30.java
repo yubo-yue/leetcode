@@ -7,51 +7,46 @@ import java.util.Map;
 
 public class L30 {
     public List<Integer> findSubstring(String s, String[] words) {
-        List<Integer> result = new ArrayList<>();
+        int wordLen = words[0].length();
+        int windowLen = wordLen * words.length;
 
-        int wordCount = words.length, wordLen = words[0].length(), strLen = s.length();
+        Map<String, Integer> targetCnt = new HashMap<>();
+        for (String w : words) {
+            targetCnt.merge(w, 1, Integer::sum);
+        }
 
-        for (int i = 0; i < wordLen; i++) {
-            if (i + wordCount * wordLen > strLen) {
-                break;
-            }
-
-            Map<String, Integer> differ = new HashMap<>();
-
-            for (int j = 0; j < wordCount; j++) {
-                String word = s.substring(i + j * wordLen, i + (j + 1) * wordLen);
-                differ.put(word, differ.getOrDefault(word, 0) + 1);
-            }
-
-            for (String word : words) {
-                differ.put(word, differ.getOrDefault(word, 0) - 1);
-                if (differ.get(word) == 0) differ.remove(word);
-            }
-
-            for (int start = i; start < strLen - wordCount * wordLen + 1; start += wordLen) {
-                if (start != i) {
-                    String word = s.substring(start + (wordCount - 1) * wordLen, start + wordCount * wordLen);
-                    differ.put(word, differ.getOrDefault(word, 0) + 1);
-                    if (differ.get(word) == 0) {
-                        differ.remove(word);
-                    }
-                    word = s.substring(start - wordLen, start);
-                    differ.put(word, differ.getOrDefault(word, 0) - 1);
-                    if (differ.get(word) == 0) {
-                        differ.remove(word);
-                    }
+        List<Integer> ans = new ArrayList<>();
+        for (int start = 0; start < wordLen; start++) {
+            Map<String, Integer> cnt = new HashMap<>();
+            int overload = 0;
+            for (int right = start + wordLen; right <= s.length(); right += wordLen) {
+                String inWord = s.substring(right - wordLen, right);
+                if (cnt.getOrDefault(inWord, 0).equals(targetCnt.getOrDefault(inWord, 0))) {
+                    overload++;
                 }
-                if (differ.isEmpty()) {
-                    result.add(start);
+                cnt.merge(inWord, 1, Integer::sum);
+                int left = right - windowLen;
+                if (left < 0) {
+                    continue;
+                }
+
+                if (overload == 0) {
+                    ans.add(left);
+                }
+                String outWord = s.substring(left, left + wordLen);
+                cnt.merge(outWord, -1, Integer::sum);
+                if (cnt.get(outWord).equals(targetCnt.getOrDefault(outWord, 0))) {
+                    overload--;
                 }
             }
         }
-        return result;
+
+        return ans;
     }
 
     public static void main(String[] args) {
         L30 algo = new L30();
-        List<Integer> result = algo.findSubstring("barfoothefoobarman", new String[]{"foo", "bar"});
+        List<Integer> result = algo.findSubstring("ooobarfoothefoobarman", new String[]{"foo", "bar"});
         result.forEach(System.out::println);
     }
 }
