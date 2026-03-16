@@ -4,16 +4,25 @@ import java.util.Arrays;
 
 public class L188 {
     public int maxProfit(int k, int[] prices) {
-        int[] buy = new int[k + 1];  // buy[j]: 完成第j次买入后的最大利润
-        int[] sell = new int[k + 1]; // sell[j]: 完成第j次卖出后的最大利润
-        Arrays.fill(buy, Integer.MIN_VALUE / 2);
-        for (int price : prices) {
-            for (int j = 1; j <= k; j++) {
-                buy[j] = Math.max(buy[j], sell[j - 1] - price);
-                sell[j] = Math.max(sell[j], buy[j] + price);
+        int n = prices.length;
+        int[][][] df = new int[n+1][k + 1][2];
+        for (int[][] matrix : df) {
+            for (int[] row : matrix) {
+                Arrays.fill(row, Integer.MIN_VALUE / 2);
             }
         }
-        return sell[k];
+        for (int j = 0; j <= k; j++) {
+            df[0][j][0] = 0;
+        }
+        for (int i = 1; i <= n; i++) {
+            df[i][0][0] = df[i - 1][0][0];
+            df[i][0][1] = Math.max(df[i - 1][0][1], df[i - 1][0][0] - prices[i - 1]);
+            for (int j = 1; j <= k; j++) {
+                df[i][j][0] = Math.max(df[i-1][j][0], df[i-1][j-1][1] + prices[i-1]);
+                df[i][j][1] = Math.max(df[i-1][j][1], df[i-1][j][0] - prices[i-1]);
+            }  
+        }
+        return df[n][k][0];
     }
 
     private int dfs(int[] prices, int i, int j, int holding, int[][][] memo) {
