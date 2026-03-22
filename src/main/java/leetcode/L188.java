@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class L188 {
     public int maxProfit(int k, int[] prices) {
         int n = prices.length;
-        int[][][] df = new int[n+1][k + 1][2];
+        int[][][] df = new int[n + 1][k + 1][2];
         for (int[][] matrix : df) {
             for (int[] row : matrix) {
                 Arrays.fill(row, Integer.MIN_VALUE / 2);
@@ -18,33 +18,33 @@ public class L188 {
             df[i][0][0] = df[i - 1][0][0];
             df[i][0][1] = Math.max(df[i - 1][0][1], df[i - 1][0][0] - prices[i - 1]);
             for (int j = 1; j <= k; j++) {
-                df[i][j][0] = Math.max(df[i-1][j][0], df[i-1][j-1][1] + prices[i-1]);
-                df[i][j][1] = Math.max(df[i-1][j][1], df[i-1][j][0] - prices[i-1]);
-            }  
+                df[i][j][0] = Math.max(df[i - 1][j][0], df[i - 1][j - 1][1] + prices[i - 1]);
+                df[i][j][1] = Math.max(df[i - 1][j][1], df[i - 1][j][0] - prices[i - 1]);
+            }
         }
         return df[n][k][0];
     }
 
-    private int dfs(int[] prices, int i, int j, int holding, int[][][] memo) {
-        if (j < 0) {
+    private int dfs(int days, int times, int holding, int[] prices, int[][][] memo) {
+        if (times < 0) {
             return Integer.MIN_VALUE / 2;
         }
-        if (i < 0) {
+        if (days < 0) {
             return holding == 0 ? 0 : Integer.MIN_VALUE / 2;
         }
 
-        if (memo[i][j][holding] != 0) {
-            return memo[i][j][holding];
+        if (memo[days][times][holding] != 0) {
+            return memo[days][times][holding];
         }
 
         if (holding == 0) {
-            memo[i][j][holding] = Math.max(dfs(prices, i - 1, j, 0, memo),
-                    dfs(prices, i - 1, j - 1, 1, memo) + prices[i]);
+            memo[days][times][holding] = Math.max(dfs(days - 1, times, 0, prices, memo),
+                    dfs(days - 1, times - 1, 1, prices, memo) + prices[days]);
         } else {
-            memo[i][j][holding] = Math.max(dfs(prices, i - 1, j, 1, memo), 
-                    dfs(prices, i - 1, j, 0, memo) - prices[i]);
+            memo[days][times][holding] = Math.max(dfs(days - 1, times, 1, prices, memo),
+                    dfs(days - 1, times, 0, prices, memo) - prices[days]);
         }
-        return memo[i][j][holding];
+        return memo[days][times][holding];
     }
 
     public static void main(String[] args) {
